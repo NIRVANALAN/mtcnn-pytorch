@@ -3,6 +3,7 @@
     generate positive, negative, positive images whose size are 12*12 and feed into PNet
 """
 import sys
+import ipdb
 import numpy as np
 import cv2
 import os
@@ -75,11 +76,14 @@ for annotation in annotations:
 
     for box in boxes:
         # box (x_left, y_top, x_right, y_bottom)
-        x1, y1, x2, y2 = box
+        # x1, y1, x2, y2 = box
+        x1, y1, w, h = box
         # w = x2 - x1 + 1
         # h = y2 - y1 + 1
-        w = x2 - x1 + 1
-        h = y2 - y1 + 1
+        # w = x2 - x1 + 1
+        # h = y2 - y1 + 1
+        x2 = x1 + w - 1
+        y2 = y1 + h - 1
 
         # ignore small faces
         # in case the ground truth boxes of small faces are not accurate
@@ -90,6 +94,8 @@ for annotation in annotations:
         for i in range(5):
             size = np.random.randint(12, min(width, height) / 2)
             # delta_x and delta_y are offsets of (x1, y1)
+
+            # ipdb.set_trace()
 
             delta_x = np.random.randint(max(-size, -x1), w)
             delta_y = np.random.randint(max(-size, -y1), h)
